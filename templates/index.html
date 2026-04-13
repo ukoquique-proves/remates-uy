@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remates</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .container { max-width: 1200px; margin: auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .header h1 { margin: 0; }
+        .header .actions button { margin-left: 10px; padding: 10px 15px; cursor: pointer; }
+        .remate-actions { display: flex; gap: 5px; }
+        .remate-actions button, .remate-actions input[type="submit"] {
+            padding: 5px 10px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            background-color: #f0f0f0;
+            border-radius: 3px;
+        }
+        .remate-actions button:hover, .remate-actions input[type="submit"]:hover {
+            background-color: #e0e0e0;
+        }
+        .notes-form { display: flex; gap: 5px; }
+        .notes-form input[type="text"] { flex-grow: 1; padding: 5px; border: 1px solid #ccc; border-radius: 3px; }
+        .visto-true { background-color: #d4edda; } /* Light green for visto */
+        .visto-false { background-color: #f8d7da; } /* Light red for not visto */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Remates Disponibles</h1>
+            <div class="actions">
+                <button onclick="window.location.href='/scrape'">Scrapear Ahora</button>
+                <button onclick="window.location.href='/export'">Exportar CSV</button>
+            </div>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Fuente</th>
+                    <th>Descripción</th>
+                    <th>Link</th>
+                    <th>Notas</th>
+                    <th>Visto</th>
+                    <th>Fecha Scrape</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for remate in remates %}
+                <tr class="{{ 'visto-true' if remate.visto else 'visto-false' }}">
+                    <td>{{ remate.fuente }}</td>
+                    <td>{{ remate.descripcion }}</td>
+                    <td><a href="{{ remate.link }}" target="_blank">Ver</a></td>
+                    <td>
+                        <form action="/update_notes/{{ remate.id }}" method="post" class="notes-form">
+                            <input type="text" name="notes" value="{{ remate.notas if remate.notas else '' }}">
+                            <input type="submit" value="Guardar">
+                        </form>
+                    </td>
+                    <td>{{ 'Sí' if remate.visto else 'No' }}</td>
+                    <td>{{ remate.fecha_scrape }}</td>
+                    <td>
+                        <div class="remate-actions">
+                            <form action="/toggle_visto/{{ remate.id }}" method="post">
+                                <button type="submit">{{ 'Desmarcar Visto' if remate.visto else 'Marcar Visto' }}</button>
+                            </form>
+                            <form action="/delete/{{ remate.id }}" method="post">
+                                <button type="submit">Eliminar</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
