@@ -35,12 +35,19 @@
         <div class="header">
             <h1>Remates Disponibles</h1>
             <div class="actions">
+                <input type="text" id="searchInput" placeholder="Buscar..." onkeyup="filterTable()" style="padding: 8px; border: 1px solid #ccc; border-radius: 3px;">
+                <select id="sourceFilter" onchange="filterTable()" style="padding: 8px; border: 1px solid #ccc; border-radius: 3px;">
+                    <option value="">Todas las fuentes</option>
+                    <option value="IMPO (Diario Oficial)">IMPO</option>
+                    <option value="ANRTCI (Rematadores)">ANRTCI</option>
+                    <option value="Intendencia de Montevideo">Intendencia</option>
+                </select>
                 <button onclick="window.location.href='/scrape'">Scrapear Ahora</button>
                 <button onclick="window.location.href='/export'">Exportar CSV</button>
             </div>
         </div>
         
-        <table>
+        <table id="rematesTable">
             <thead>
                 <tr>
                     <th>Fuente</th>
@@ -55,8 +62,8 @@
             <tbody>
                 {% for remate in remates %}
                 <tr class="{{ 'visto-true' if remate.visto else 'visto-false' }}">
-                    <td>{{ remate.fuente }}</td>
-                    <td>{{ remate.descripcion }}</td>
+                    <td class="source">{{ remate.fuente }}</td>
+                    <td class="description">{{ remate.descripcion }}</td>
                     <td><a href="{{ remate.link }}" target="_blank">Ver</a></td>
                     <td>
                         <form action="/update_notes/{{ remate.id }}" method="post" class="notes-form">
@@ -81,5 +88,33 @@
             </tbody>
         </table>
     </div>
+
+    <script>
+        function filterTable() {
+            const searchInput = document.getElementById("searchInput").value.toLowerCase();
+            const sourceFilter = document.getElementById("sourceFilter").value;
+            const table = document.getElementById("rematesTable");
+            const tr = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < tr.length; i++) {
+                const tdSource = tr[i].getElementsByClassName("source")[0];
+                const tdDesc = tr[i].getElementsByClassName("description")[0];
+                
+                if (tdSource && tdDesc) {
+                    const sourceText = tdSource.textContent || tdSource.innerText;
+                    const descText = tdDesc.textContent || tdDesc.innerText;
+                    
+                    const matchesSearch = descText.toLowerCase().indexOf(searchInput) > -1;
+                    const matchesSource = sourceFilter === "" || sourceText === sourceFilter;
+                    
+                    if (matchesSearch && matchesSource) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
 </body>
 </html>
