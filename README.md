@@ -13,6 +13,10 @@ Este proyecto es una herramienta para la búsqueda y gestión de remates de inmu
     - Exportar la lista filtrada a CSV.
 - **Base de Datos Local**: Almacenamiento persistente en SQLite (`remates.db`).
 
+## Configuración para Puppy Linux
+
+Si estás ejecutando este proyecto en un entorno Puppy Linux, consulta [PUPPYLINUX.md](file:///root/PERSONAL_ORGANIZER/REMATES/PUPPYLINUX.md) para conocer los ajustes necesarios de permisos y dependencias.
+
 ## Instalación
 
 1. **Clonar el repositorio**:
