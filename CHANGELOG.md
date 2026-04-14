@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 2026-04-14
+
+### Adaptación a Entorno Puppy Linux
+
+- **Resolución de Permisos**: Se identificó y resolvió una restricción de escritura en el sistema de archivos de `/root/PERSONAL_ORGANIZER/REMATES`. El usuario aplicó `chmod -R 777` manualmente para permitir la persistencia de datos (SQLite) y la instalación de dependencias.
+- **Gestión Local de Dependencias**:
+    - Se instalaron `flask`, `requests` y `beautifulsoup4` directamente en el directorio raíz del proyecto (`pip install -t .`) para evitar las restricciones de instalación global (`PEP 668`).
+    - Se actualizó `.gitignore` para excluir las carpetas de paquetes instalados localmente, manteniendo el repositorio limpio.
+- **Documentación de Entorno**:
+    - Se creó [PUPPYLINUX.md](file:///root/PERSONAL_ORGANIZER/REMATES/PUPPYLINUX.md) detallando los pasos de adaptación y ejecución específicos para este sistema.
+    - Se actualizó [README.md](file:///root/PERSONAL_ORGANIZER/REMATES/README.md) con una referencia directa a la nueva guía de configuración.
+- **Gestión de Versiones**:
+    - Se creó la rama `puppylinux-env` para mantener los cambios específicos de este entorno de forma independiente.
+    - Se realizó el push exitoso a GitHub utilizando un token de acceso personal.
+
 ## 2026-04-12
 
 ### `scraper.py`
